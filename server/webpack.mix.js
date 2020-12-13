@@ -14,9 +14,9 @@ const mix = require('laravel-mix');
 // mix.js('resources/js/app.js', 'public/js')
 //     .sass('resources/sass/app.scss', 'public/css');
 
-// mix.browserSync('spa-vue.test')
-//     .js('resources/js/app.js', 'public/js')
-//     .version()
+mix.browserSync('spa-vue.test')
+    .js('resources/js/app.js', 'public/js')
+    .version()
 
 // BrowserSync というツールを組み合わせて、JavaScript や PHP ファイルが変更されたときに自動的にブラウザがリロードされるようになります。
 mix.browserSync({
