@@ -23,6 +23,7 @@ const routes = [
 
 // VueRouterインスタンスを作成する
 const router = new VueRouter({
+    mode: 'history', // URLの#部分を本来の形にする
     routes
 })
 
