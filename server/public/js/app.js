@@ -20774,8 +20774,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var state = {
   // ログイン済みユーザーを保持する
   user: null
+}; // ステートそのものではなくステートを元に演算した結果が欲しい場合はゲッターを使う
+
+var getters = {
+  // check はログインチェックに使用 確実に真偽値を返すために二重否定
+  check: function check(state) {
+    return !!state.user;
+  },
+  username: function username(state) {
+    return state.user ? state.user.name : '';
+  }
 };
-var getters = {};
 var mutations = {
   // user ステートの値を更新する
   setUser: function setUser(state, user) {

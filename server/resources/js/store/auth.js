@@ -4,7 +4,12 @@ const state = {
     user: null
 }
 
-const getters = {}
+// ステートそのものではなくステートを元に演算した結果が欲しい場合はゲッターを使う
+const getters = {
+    // check はログインチェックに使用 確実に真偽値を返すために二重否定
+    check: state => !! state.user,
+    username: state => state.user ? state.user.name : ''
+}
 
 const mutations = {
     // user ステートの値を更新する
