@@ -5,7 +5,7 @@
 シングルページアプリケーションの練習用
 写真共有アプリ
 
-参考Qiita記事
+参考記事
 https://www.hypertextcandy.com/vue-laravel-tutorial-setting-up-spa-project/
 
 
