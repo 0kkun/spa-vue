@@ -65,6 +65,8 @@ class RouteServiceProvider extends ServiceProvider
 
     /**
      * Define the "api" routes for the application.
+     * アプリケーションの起動時にルート定義を読み込むためのクラス
+     * ミドルウェアグループを api から web に変更。
      *
      * These routes are typically stateless.
      *
@@ -73,7 +75,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-             ->middleware('api')
+             ->middleware('web') //変更
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
     }
