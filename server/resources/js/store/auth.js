@@ -31,6 +31,10 @@ const actions = {
         const response = await axios.post('/api/login', data)
         context.commit('setUser', response.data)
     },
+    async logout (context) {
+        const response = await axios.post('/api/logout')
+        context.commit('setUser', null)
+    },
     // アプリ起動時のログインチェック実装
     async currentUser (context) {
         const response = await axios.get('/api/user')
