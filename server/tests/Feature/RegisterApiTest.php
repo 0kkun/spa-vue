@@ -12,6 +12,7 @@ class RegisterApiTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * 登録成功後は登録ユーザーの情報を返却させる
      * @test
      */
     public function should_新しいユーザーを作成して返却する()
