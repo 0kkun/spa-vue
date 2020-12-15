@@ -53,4 +53,19 @@ class LoginController extends Controller
     {
         return $user;
     }
+
+    /**
+     * ログアウト後にセッションを返す
+     * AuthenticatesUsers トレイトの logout メソッド参照
+     *
+     * @param Request $request
+     * @return void
+     */
+    protected function loggedOut(Request $request)
+    {
+        // セッションを再生成する
+        $request->session()->regenerate();
+
+        return response()->json();
+    }
 }
