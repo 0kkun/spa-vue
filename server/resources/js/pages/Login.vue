@@ -72,8 +72,11 @@ export default {
         }
     },
     methods: {
-        login () {
-            console.log(this.loginForm)
+        async login () {
+            // authストアのloginアクションを呼び出す
+            await this.$store.dispatch('auth/login', this.loginForm)
+            // トップページに移動する
+            this.$router.push('/')
         },
         async register () {
             // authストアのresigterアクションを呼び出す
@@ -81,6 +84,11 @@ export default {
             await this.$store.dispatch('auth/register', this.registerForm)
             // トップページに移動する
             this.$router.push('/')
+        },
+        async logout (context) {
+            const response = await axios.post('/api/logout')
+            // ログアウト処理が完了したあとは user ステートを null で更新
+            context.commit('setUser', null)
         }
     }
 }

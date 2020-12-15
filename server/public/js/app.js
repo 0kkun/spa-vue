@@ -2040,9 +2040,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     login: function login() {
-      console.log(this.loginForm);
-    },
-    register: function register() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
@@ -2051,7 +2048,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _this.$store.dispatch('auth/register', _this.registerForm);
+                return _this.$store.dispatch('auth/login', _this.loginForm);
 
               case 2:
                 // トップページに移動する
@@ -2063,6 +2060,52 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee);
+      }))();
+    },
+    register: function register() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return _this2.$store.dispatch('auth/register', _this2.registerForm);
+
+              case 2:
+                // トップページに移動する
+                _this2.$router.push('/');
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    logout: function logout(context) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.post('/api/logout');
+
+              case 2:
+                response = _context3.sent;
+                // ログアウト処理が完了したあとは user ステートを null で更新
+                context.commit('setUser', null);
+
+              case 4:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     }
   }
@@ -20689,6 +20732,28 @@ var actions = {
           }
         }
       }, _callee);
+    }))();
+  },
+  login: function login(context, data) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return axios.post('/api/login', data);
+
+            case 2:
+              response = _context2.sent;
+              context.commit('setUser', response.data);
+
+            case 4:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
     }))();
   }
 }; // ステート・ゲッター・ミューテーション・アクションを定義してストアオブジェクトとしてエクスポートする
