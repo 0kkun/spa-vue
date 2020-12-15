@@ -20919,6 +20919,30 @@ var actions = {
         }
       }, _callee2);
     }))();
+  },
+  // アプリ起動時のログインチェック実装
+  currentUser: function currentUser(context) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+      var response, user;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return axios.get('/api/user');
+
+            case 2:
+              response = _context3.sent;
+              user = response.data || null;
+              context.commit('setUser', user);
+
+            case 5:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }))();
   }
 }; // ステート・ゲッター・ミューテーション・アクションを定義してストアオブジェクトとしてエクスポートする
 

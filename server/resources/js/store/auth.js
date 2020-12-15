@@ -30,6 +30,12 @@ const actions = {
     async login (context, data) {
         const response = await axios.post('/api/login', data)
         context.commit('setUser', response.data)
+    },
+    // アプリ起動時のログインチェック実装
+    async currentUser (context) {
+        const response = await axios.get('/api/user')
+        const user = response.data || null
+        context.commit('setUser', user)
     }
 }
 
