@@ -5,6 +5,9 @@ import VueRouter from 'vue-router'
 import PhotoList from './pages/PhotoList.vue'
 import Login from './pages/Login.vue'
 
+// auth ストアの check ゲッターを使用するため追加
+import store from './store'
+
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
 Vue.use(VueRouter)
@@ -17,7 +20,17 @@ const routes = [
     },
     {
         path: '/login',
-        component: Login
+        component: Login,
+        // 定義されたルートにアクセスされてページコンポーネントが切り替わる直前に呼び出される関数
+        // auth/check ゲッターでログイン状態をチェックし、ログインしていればトップページに切り替え、
+        // ログインしていなければそのままログインページを表示する
+        beforeEnter (to, from, next) {
+            if (store.getters['auth/check']) {
+                next('/')
+            } else {
+                next()
+            }
+        }
     }
 ]
 
