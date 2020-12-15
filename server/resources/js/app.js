@@ -1,4 +1,5 @@
-require('./bootstrap');
+
+import './bootstrap'
 
 import Vue from 'vue'
 // ルーティングの定義をインポートする
