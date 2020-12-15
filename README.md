@@ -53,12 +53,23 @@ DB_PASSWORD=password
 APP_URL=http://localhost:8000
 ```
 
-- 一度
-```
-```
-
 ### artisanコマンドの実行場所
 
 ```
 make work
+```
+
+### インストールしたパッケージのメモ
+
+```
+npm install
+
+# Vue
+npm install -D vue
+
+# Vue Router
+npm install -D vue-router
+
+# Vuex
+npm install --save-dev vuex
 ```
