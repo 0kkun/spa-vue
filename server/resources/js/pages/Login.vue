@@ -34,6 +34,17 @@
         <!-- 新規会員登録フォーム -->
         <div class="panel" v-show="tab === 2">
             <form class="form" @submit.prevent="register">
+
+                <!-- エラーメッセージ表示用 -->
+                <div v-if="loginErrors" class="errors">
+                    <ul v-if="loginErrors.email">
+                        <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
+                    </ul>
+                    <ul v-if="loginErrors.password">
+                        <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
+                    </ul>
+                </div>
+
                 <label for="username">Name</label>
                 <input type="text" class="form__item" id="username" v-model="registerForm.name">
 
@@ -100,6 +111,9 @@ export default {
     computed: {
         apiStatus () {
             return this.$store.state.auth.apiStatus
+        },
+        loginErrors () {
+            return this.$store.state.auth.loginErrorMessages
         }
     },
 }
