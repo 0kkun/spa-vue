@@ -90,6 +90,13 @@ export default {
             // ログアウト処理が完了したあとは user ステートを null で更新
             context.commit('setUser', null)
         }
-    }
+    },
+    // apiStatus が false の場合にはトップページへの移動処理を行わないように制御を加える
+    // 算出プロパティで auth モジュールの apiStatus ステートを参照
+    computed: {
+        apiStatus () {
+            return this.$store.state.auth.apiStatus
+        }
+    },
 }
 </script>

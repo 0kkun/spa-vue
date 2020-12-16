@@ -2224,6 +2224,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     }
+  },
+  // apiStatus が false の場合にはトップページへの移動処理を行わないように制御を加える
+  // 算出プロパティで auth モジュールの apiStatus ステートを参照
+  computed: {
+    apiStatus: function apiStatus() {
+      return this.$store.state.auth.apiStatus;
+    }
   }
 });
 
