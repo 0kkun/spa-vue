@@ -20974,15 +20974,21 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+// 定義したステータスコードをインポート
+
 var state = {
   // ログイン済みユーザーを保持する
-  user: null
+  user: null,
+  // API 呼び出しが成功したか失敗したかを表す
+  // コンポーネント側ではこの apiStatus ステートを参照して後続の処理を行うかどうかを判別
+  apiStatus: null
 }; // ステートそのものではなくステートを元に演算した結果が欲しい場合はゲッターを使う
 
 var getters = {
@@ -20998,6 +21004,10 @@ var mutations = {
   // user ステートの値を更新する
   setUser: function setUser(state, user) {
     state.user = user;
+  },
+  // ステートを更新するため追加
+  setApiStatus: function setApiStatus(state, status) {
+    state.apiStatus = status;
   }
 };
 /**
@@ -21035,14 +21045,36 @@ var actions = {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.next = 2;
-              return axios.post('/api/login', data);
+              // 非同期処理が成功した場合も失敗した場合も同じ変数に結果を代入できる
+              // 失敗した場合、responseにはerr.responseが入る
+              context.commit('setApiStatus', null); // // 最初はnull
 
-            case 2:
+              _context2.next = 3;
+              return axios.post('/api/login', data)["catch"](function (err) {
+                return err.response || err;
+              });
+
+            case 3:
               response = _context2.sent;
-              context.commit('setUser', response.data);
 
-            case 4:
+              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                _context2.next = 8;
+                break;
+              }
+
+              // 成功したらtrue
+              context.commit('setApiStatus', true);
+              context.commit('setUser', response.data);
+              return _context2.abrupt("return", false);
+
+            case 8:
+              // 失敗だったらfalse
+              context.commit('setApiStatus', false);
+              context.commit('error/setCode', response.status, {
+                root: true
+              });
+
+            case 10:
             case "end":
               return _context2.stop();
           }
