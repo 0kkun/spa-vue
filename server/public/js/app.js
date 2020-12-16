@@ -21020,7 +21020,9 @@ var state = {
   user: null,
   // API 呼び出しが成功したか失敗したかを表す
   // コンポーネント側ではこの apiStatus ステートを参照して後続の処理を行うかどうかを判別
-  apiStatus: null
+  apiStatus: null,
+  // エラーメッセージを入れる loginErrorMessages ステートを追加
+  loginErrorMessages: null
 }; // ステートそのものではなくステートを元に演算した結果が欲しい場合はゲッターを使う
 
 var getters = {
@@ -21040,6 +21042,10 @@ var mutations = {
   // ステートを更新するため追加
   setApiStatus: function setApiStatus(state, status) {
     state.apiStatus = status;
+  },
+  // エラーメッセージ用
+  setLoginErrorMessages: function setLoginErrorMessages(state, messages) {
+    state.loginErrorMessages = messages;
   }
 };
 /**
@@ -21079,7 +21085,7 @@ var actions = {
             case 0:
               // 非同期処理が成功した場合も失敗した場合も同じ変数に結果を代入できる
               // 失敗した場合、responseにはerr.responseが入る
-              context.commit('setApiStatus', null); // // 最初はnull
+              context.commit('setApiStatus', null); // 最初はnull
 
               _context2.next = 3;
               return axios.post('/api/login', data)["catch"](function (err) {
@@ -21102,9 +21108,15 @@ var actions = {
             case 8:
               // 失敗だったらfalse
               context.commit('setApiStatus', false);
-              context.commit('error/setCode', response.status, {
-                root: true
-              });
+
+              if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
+                // loginErrorMessages にエラーメッセージをセット
+                context.commit('setLoginErrorMessages', response.data.errors);
+              } else {
+                context.commit('error/setCode', response.status, {
+                  root: true
+                });
+              }
 
             case 10:
             case "end":

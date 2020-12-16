@@ -1,13 +1,15 @@
 
 // 定義したステータスコードをインポート
-import { OK } from '../util'
+import { OK, UNPROCESSABLE_ENTITY } from '../util'
 
 const state = {
     // ログイン済みユーザーを保持する
     user: null,
     // API 呼び出しが成功したか失敗したかを表す
     // コンポーネント側ではこの apiStatus ステートを参照して後続の処理を行うかどうかを判別
-    apiStatus: null
+    apiStatus: null,
+    // エラーメッセージを入れる loginErrorMessages ステートを追加
+    loginErrorMessages: null
 }
 
 // ステートそのものではなくステートを元に演算した結果が欲しい場合はゲッターを使う
@@ -25,6 +27,10 @@ const mutations = {
     // ステートを更新するため追加
     setApiStatus (state, status) {
         state.apiStatus = status
+    },
+    // エラーメッセージ用
+    setLoginErrorMessages (state, messages) {
+        state.loginErrorMessages = messages
     }
 }
 
@@ -40,7 +46,7 @@ const actions = {
     async login (context, data) {
         // 非同期処理が成功した場合も失敗した場合も同じ変数に結果を代入できる
         // 失敗した場合、responseにはerr.responseが入る
-        context.commit('setApiStatus', null) // // 最初はnull
+        context.commit('setApiStatus', null) // 最初はnull
         const response = await axios.post('/api/login', data)
             .catch(err => err.response || err)
 
@@ -53,7 +59,12 @@ const actions = {
         }
         // 失敗だったらfalse
         context.commit('setApiStatus', false)
-        context.commit('error/setCode', response.status, { root: true })
+        if (response.status === UNPROCESSABLE_ENTITY) {
+            // loginErrorMessages にエラーメッセージをセット
+            context.commit('setLoginErrorMessages', response.data.errors)
+        } else {
+            context.commit('error/setCode', response.status, { root: true })
+        }
     },
     async logout (context) {
         const response = await axios.post('/api/logout')
