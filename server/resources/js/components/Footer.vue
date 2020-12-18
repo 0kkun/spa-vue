@@ -10,20 +10,29 @@
     </footer>
 </template>
 
+
 <script>
+import { mapState, mapGetters } from 'vuex'
+
 // スクリプトブロックを追加
 export default {
+    // 算出プロパティは mapState と mapGetters を用いて記述
+    computed: {
+        ...mapState({
+            apiStatus: state => state.auth.apiStatus
+        }),
+        ...mapGetters({
+            isLogin: 'auth/check'
+        })
+    },
     methods: {
         async logout () {
-        await this.$store.dispatch('auth/logout')
+            await this.$store.dispatch('auth/logout')
 
-        this.$router.push('/login')
+            if (this.apiStatus) {
+                this.$router.push('/login')
+            }
         }
-    },
-    computed: {
-        isLogin () {
-            return this.$store.getters['auth/check']
-        }
-    },
+    }
 }
 </script>
