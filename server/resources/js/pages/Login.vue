@@ -114,8 +114,13 @@ export default {
             const response = await axios.post('/api/logout')
             // ログアウト処理が完了したあとは user ステートを null で更新
             context.commit('setUser', null)
+        },
+        clearError () {
+            this.$store.commit('auth/setLoginErrorMessages', null)
         }
     },
-
+    created () {
+        this.clearError()
+    }
 }
 </script>
