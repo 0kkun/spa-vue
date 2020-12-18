@@ -19,6 +19,17 @@
         <div class="panel" v-show="tab === 1">
             <!-- submit イベントのハンドラとしてloginメソッドを指定 -->
             <form class="form" @submit.prevent="login">
+
+                <!-- エラーメッセージ表示用 -->
+                <div v-if="loginErrors" class="errors">
+                    <ul v-if="loginErrors.email">
+                        <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
+                    </ul>
+                    <ul v-if="loginErrors.password">
+                        <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
+                    </ul>
+                </div>
+
                 <label for="login-email">Email</label>
                 <input type="text" class="form__item" id="login-email" v-model="loginForm.email">
 
@@ -34,17 +45,6 @@
         <!-- 新規会員登録フォーム -->
         <div class="panel" v-show="tab === 2">
             <form class="form" @submit.prevent="register">
-
-                <!-- エラーメッセージ表示用 -->
-                <div v-if="loginErrors" class="errors">
-                    <ul v-if="loginErrors.email">
-                        <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
-                    </ul>
-                    <ul v-if="loginErrors.password">
-                        <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
-                    </ul>
-                </div>
-
                 <label for="username">Name</label>
                 <input type="text" class="form__item" id="username" v-model="registerForm.name">
 
@@ -82,6 +82,16 @@ export default {
             }
         }
     },
+    // apiStatus が false の場合にはトップページへの移動処理を行わないように制御を加える
+    // 算出プロパティで auth モジュールの apiStatus ステートを参照
+    computed: {
+        apiStatus () {
+            return this.$store.state.auth.apiStatus
+        },
+        loginErrors () {
+            return this.$store.state.auth.loginErrorMessages
+        }
+    },
     methods: {
         async login () {
             // authストアのloginアクションを呼び出す
@@ -106,15 +116,6 @@ export default {
             context.commit('setUser', null)
         }
     },
-    // apiStatus が false の場合にはトップページへの移動処理を行わないように制御を加える
-    // 算出プロパティで auth モジュールの apiStatus ステートを参照
-    computed: {
-        apiStatus () {
-            return this.$store.state.auth.apiStatus
-        },
-        loginErrors () {
-            return this.$store.state.auth.loginErrorMessages
-        }
-    },
+
 }
 </script>

@@ -57,6 +57,7 @@ const actions = {
             context.commit('setUser', response.data)
             return false
         }
+
         // 失敗だったらfalse
         context.commit('setApiStatus', false)
         if (response.status === UNPROCESSABLE_ENTITY) {
