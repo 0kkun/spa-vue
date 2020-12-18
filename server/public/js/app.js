@@ -20663,6 +20663,18 @@ window.axios.interceptors.request.use(function (config) {
   config.headers['X-XSRF-TOKEN'] = Object(_util__WEBPACK_IMPORTED_MODULE_0__["getCookieValue"])('XSRF-TOKEN');
   return config;
 });
+/**
+ * 共通しているのでインターセプターにまとめる
+ * axios の response インターセプターはレスポンスを受けた後の処理を上書きする
+ * 第一引数は成功時の処理 (そのままにしている)
+ * 第二引数は失敗時の処理
+ */
+
+window.axios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  return error.response || error;
+});
 
 /***/ }),
 
