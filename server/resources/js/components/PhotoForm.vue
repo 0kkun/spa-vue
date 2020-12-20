@@ -4,7 +4,7 @@
         <h2 class="title">Submit a photo</h2>
         <form class="form" @submit.prevent="submit">
 
-            <!-- エラ〜メッセージ表示用 -->
+            <!-- エラーメッセージ表示用 -->
             <div class="errors" v-if="errors">
                 <ul v-if="errors.photo">
                 <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
