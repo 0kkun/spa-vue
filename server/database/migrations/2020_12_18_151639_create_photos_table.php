@@ -15,10 +15,10 @@ class CreatePhotosTable extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->unsignedInteger('user_id');
+            $table->bigInteger('user_id')->unsigned();
             $table->string('filename');
             $table->timestamps();
-    
+
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
@@ -30,6 +30,9 @@ class CreatePhotosTable extends Migration
      */
     public function down()
     {
+        // Schema::table('photos', function (Blueprint $table) {
+        //     $table->dropForeign('photos_user_id_foreign');
+        // });
         Schema::dropIfExists('photos');
     }
 }
