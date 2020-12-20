@@ -5,8 +5,17 @@ COPY php.ini /usr/local/etc/php/
 #パッケージ管理ツールapt-getの更新と必要パッケージのインストール
 RUN apt-get update \
   && apt-get install -y zlib1g-dev mariadb-client vim libzip-dev \
+  # for GD
+  libfreetype6-dev \
+  libjpeg62-turbo-dev \
+  libpng-dev \
+  libwebp-dev \
+  libxpm-dev \
+  && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
+  && docker-php-ext-install -j$(nproc) gd \
+  #
   && docker-php-ext-install zip pdo_mysql \
-  && apt-get -y install unzip
+  && apt-get -y install unzip 
 
 #Composer install
 COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
