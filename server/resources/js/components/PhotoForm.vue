@@ -3,6 +3,14 @@
     <div v-show="value" class="photo-form">
         <h2 class="title">Submit a photo</h2>
         <form class="form" @submit.prevent="submit">
+
+            <!-- エラ〜メッセージ表示用 -->
+            <div class="errors" v-if="errors">
+                <ul v-if="errors.photo">
+                <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
+                </ul>
+            </div>
+
             <input class="form__item" type="file" @change="onFileChange">
             <output class="form__output" v-if="preview">
                 <img :src="preview" alt="">
@@ -16,6 +24,8 @@
 </template>
 
 <script>
+import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+
 export default {
     // propsは親コンポーネントから子コンポーネントにデータの受け渡しする時に使う
     // このコンポーネントの表示 / 非表示を（value を渡す）親コンポーネント側で制御できるよう
@@ -28,7 +38,8 @@ export default {
     data () {
         return {
             preview: null,
-            photo: null
+            photo: null,
+            errors: null
         }
     },
     methods: {
@@ -64,6 +75,27 @@ export default {
             // photo にファイルを代入する
             this.photo = event.target.files[0]
         },
+
+        async submit () {
+            const formData = new FormData()
+            formData.append('photo', this.photo)
+            const response = await axios.post('/api/photos', formData)
+
+            if (response.status === UNPROCESSABLE_ENTITY) {
+                this.errors = response.data.errors
+                return false
+            }
+
+            this.reset()
+            this.$emit('input', false)
+
+            if (response.status !== CREATED) {
+                this.$store.commit('error/setCode', response.status)
+                return false
+            }
+
+            this.$router.push(`/photos/${response.data.id}`)
+        },
         // 入力欄の値とプレビュー表示をクリアするメソッド
         reset () {
             this.preview = ''
@@ -71,16 +103,6 @@ export default {
             // this.$el はコンポーネントそのものの DOM 要素
             this.$el.querySelector('input[type="file"]').value = null
         },
-        async submit () {
-            const formData = new FormData()
-            formData.append('photo', this.photo)
-            const response = await axios.post('/api/photos', formData)
-
-            this.reset()
-            this.$emit('input', false)
-
-            this.$router.push(`/photos/${response.data.id}`)
-        }
     }
 }
 </script>
