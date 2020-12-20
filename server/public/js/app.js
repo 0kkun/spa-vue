@@ -2258,9 +2258,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return", false);
 
               case 15:
+                // メッセージ登録
+                _this2.$store.commit('message/setContent', {
+                  content: '写真が投稿されました！',
+                  timeout: 6000
+                });
+
                 _this2.$router.push("/photos/".concat(response.data.id));
 
-              case 16:
+              case 17:
               case "end":
                 return _context.stop();
             }
