@@ -2,8 +2,13 @@
 <template>
     <div v-show="value" class="photo-form">
         <h2 class="title">Submit a photo</h2>
-        <form class="form" @submit.prevent="submit">
 
+        <!-- ロード中を表示 -->
+        <div v-show="loading" class="panel">
+            <Loader>Sending your photo...</Loader>
+        </div>
+
+        <form v-show="! loading" class="form" @submit.prevent="submit">
             <!-- エラーメッセージ表示用 -->
             <div class="errors" v-if="errors">
                 <ul v-if="errors.photo">
@@ -18,15 +23,18 @@
             <div class="form__button">
                 <button type="submit" class="button button--inverse">submit</button>
             </div>
-
         </form>
     </div>
 </template>
 
 <script>
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+import Loader from './Loader.vue'
 
 export default {
+    components: {
+        Loader
+    },
     // propsは親コンポーネントから子コンポーネントにデータの受け渡しする時に使う
     // このコンポーネントの表示 / 非表示を（value を渡す）親コンポーネント側で制御できるよう
     props: {
@@ -37,6 +45,7 @@ export default {
     },
     data () {
         return {
+            loading: false,
             preview: null,
             photo: null,
             errors: null
@@ -77,9 +86,13 @@ export default {
         },
 
         async submit () {
+            this.loading = true
+
             const formData = new FormData()
             formData.append('photo', this.photo)
             const response = await axios.post('/api/photos', formData)
+
+            this.loading = false
 
             if (response.status === UNPROCESSABLE_ENTITY) {
                 this.errors = response.data.errors
