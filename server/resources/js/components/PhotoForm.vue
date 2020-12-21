@@ -84,7 +84,13 @@ export default {
             // photo にファイルを代入する
             this.photo = event.target.files[0]
         },
-
+        // 入力欄の値とプレビュー表示をクリアするメソッド
+        reset () {
+            this.preview = ''
+            this.photo = null
+            // this.$el はコンポーネントそのものの DOM 要素
+            this.$el.querySelector('input[type="file"]').value = null
+        },
         async submit () {
             this.loading = true
 
@@ -114,13 +120,6 @@ export default {
             })
 
             this.$router.push(`/photos/${response.data.id}`)
-        },
-        // 入力欄の値とプレビュー表示をクリアするメソッド
-        reset () {
-            this.preview = ''
-            this.photo = null
-            // this.$el はコンポーネントそのものの DOM 要素
-            this.$el.querySelector('input[type="file"]').value = null
         },
     }
 }

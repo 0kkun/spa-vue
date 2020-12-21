@@ -15,6 +15,8 @@ class Photo extends Model
     /** プライマリキーの型 */
     protected $keyType = 'string';
 
+    public $incrementing = false;
+
     /** IDの桁数 */
     const ID_LENGTH = 12;
 

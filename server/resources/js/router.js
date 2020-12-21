@@ -3,9 +3,9 @@ import VueRouter from 'vue-router'
 
 // ページコンポーネントをインポートする
 import PhotoList from './pages/PhotoList.vue'
+import PhotoDetail from './pages/PhotoDetail.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
-import PhotoDetail from './pages/PhotoDetail.vue'
 
 // auth ストアの check ゲッターを使用するため追加
 import store from './store'
