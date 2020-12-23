@@ -12,6 +12,7 @@
 
 <script>
 export default {
+    // 一つ分の写真データとして item という props を受け取る
     props: {
         item: {
         type: Object,
